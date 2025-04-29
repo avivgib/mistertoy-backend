@@ -1,0 +1,35 @@
+[
+    {
+        "_id": "t113",
+        "name": "Wooden Play Kitchen",
+        "price": 75,
+        "labels": [
+            "Baby"
+        ],
+        "createdAt": 1631043801011,
+        "inStock": true,
+        "imgUrl": ""
+    },
+    {
+        "_id": "t114",
+        "name": "Racing Car Set",
+        "price": 70,
+        "labels": [
+            "On wheels"
+        ],
+        "createdAt": 1631044801011,
+        "inStock": false,
+        "imgUrl": ""
+    },
+    {
+        "_id": "t115",
+        "name": "Glow-in-the-Dark Stars",
+        "price": 15,
+        "labels": [
+            "Art"
+        ],
+        "createdAt": 1631045801011,
+        "inStock": true,
+        "imgUrl": ""
+    }
+]
