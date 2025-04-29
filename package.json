@@ -1,13 +1,17 @@
 {
   "name": "mistertoy-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
+    "dev": "nodemon --ignore \"./data\" server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Aviv Gibli",
   "license": "ISC",
-  "type": "commonjs"
+  "description": "",
+  "keywords": [],
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
