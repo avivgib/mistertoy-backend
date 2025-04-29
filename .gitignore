@@ -1,2 +1,8 @@
-node_modules
-logs/backend.log
+# Node.js package folders
+node_modules/
+
+# IDE files
+.vscode/
+
+# logs files
+logs/
