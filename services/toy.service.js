@@ -10,15 +10,26 @@ export const toyService = {
 }
 
 function query(filterBy) {
-    return Promise.resolve(toys)
-        .then(toys => {
-            if (filterBy.txt) {
-                const regExp = new RegExp(filterBy.txt, 'i')
-                toys = toys.filter(toy => regExp.test(toy.name))
-            }
+    console.log('toys', filterBy)
+    let filteredToys = toys
+    
+    if (filterBy.txt) {
+        const regExp = new RegExp(filterBy.txt, 'i')
+        filteredToys = filteredToys.filter(toy => regExp.test(toy.name))
+    }
+    return Promise.resolve(filteredToys)
 
-            return toys 
-        })
+
+    // return Promise.resolve(toys)
+    //     .then(toys => {
+    //         if (filterBy.txt) {
+    //             const regExp = new RegExp(filterBy.txt, 'i')
+    //             toys = toys.filter(toy => regExp.test(toy.name))
+    //         }
+
+    //         console.log('toys', toys)
+    //         return toys 
+    //     })
 }
 
 function getById(toyId) {
