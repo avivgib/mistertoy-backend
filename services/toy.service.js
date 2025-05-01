@@ -1,4 +1,6 @@
+import fs from 'fs'
 import { utilService } from "./util.service.js"
+import { loadEnvFile } from 'process'
 
 const toys = utilService.readJsonFile('data/toy.json')
 
@@ -10,26 +12,36 @@ export const toyService = {
 }
 
 function query(filterBy) {
-    console.log('toys', filterBy)
+    // console.log('\nfilters:', filterBy)
+    // console.log('\ntxt filter:', filterBy.txt)
+    // console.log('\nlabels filter:', filterBy.labels)
+    console.log('\nsort filter:', filterBy.sortBy)
+
     let filteredToys = toys
-    
+
     if (filterBy.txt) {
         const regExp = new RegExp(filterBy.txt, 'i')
         filteredToys = filteredToys.filter(toy => regExp.test(toy.name))
     }
+
+    if (filterBy.labels && filterBy.labels.length) {
+        filteredToys = filteredToys.filter(toy => 
+            toy.labels.some(label => filterBy.labels.includes(label))
+        )
+    }
+   
+    if (filterBy.sortBy) {
+        console.log('into sort', filterBy.sortBy)
+        if (filterBy.sortBy === 'name') {
+            filteredToys = filteredToys.sort((a, b) => a.name.localeCompare(b.name))
+        } else if (filterBy.sortBy === 'price') {
+            filteredToys = filteredToys.sort((a, b) => a.price - b.price)
+        } else if (filterBy.sortBy === 'createdAt') {
+            filteredToys = filteredToys.sort((a, b) => a.createdAt - b.createdAt)
+        }
+    }
+
     return Promise.resolve(filteredToys)
-
-
-    // return Promise.resolve(toys)
-    //     .then(toys => {
-    //         if (filterBy.txt) {
-    //             const regExp = new RegExp(filterBy.txt, 'i')
-    //             toys = toys.filter(toy => regExp.test(toy.name))
-    //         }
-
-    //         console.log('toys', toys)
-    //         return toys 
-    //     })
 }
 
 function getById(toyId) {

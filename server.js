@@ -35,10 +35,12 @@ console.log('HYE');
 // **************** Toys API ****************:
 app.get('/api/toy', (req, res) => {
     console.log('req query:', req.query)
+    // console.log('req sort:', req.query.sortBy)
     
     const filterBy = {
         txt: req.query.name || '',
         sortBy: req.query.sortBy || '',
+        labels: req.query.labels || []
     }
     toyService.query(filterBy)
         .then(toys => res.send(toys))
