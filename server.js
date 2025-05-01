@@ -36,27 +36,26 @@ console.log('HYE');
 app.get('/api/toy', (req, res) => {
     console.log('req query:', req.query)
     // console.log('req sort:', req.query.sortBy)
-    
+
     const filterBy = {
         txt: req.query.name || '',
         sortBy: req.query.sortBy || '',
         labels: req.query.labels || [],
-        inStock: req.query.inStock === undefined ? undefined :
-                 req.query.inStock === 'true' ? true :
-                 req.query.inStock === 'false' ? false :undefined
+        inStock: req.query.inStock === 'true' ? true :
+            req.query.inStock === 'false' ? false : undefined
     }
-    
+
     toyService.query(filterBy)
         .then(toys => res.send(toys))
         .catch(err => {
-                loggerService.error('Cannot load toys', err)
+            loggerService.error('Cannot load toys', err)
             res.status(400).send('Cannot load toys')
         })
 })
 
 app.post('/api/toy', (req, res) => {
     console.log('POSTTT');
-    
+
 })
 
 
