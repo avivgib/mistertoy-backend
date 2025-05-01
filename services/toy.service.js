@@ -6,17 +6,12 @@ const toys = utilService.readJsonFile('data/toy.json')
 
 export const toyService = {
     query,
-    getById,
+    get,
     remove,
     save
 }
 
 function query(filterBy) {
-    // console.log('\nfilters:', filterBy)
-    // console.log('\ntxt filter:', filterBy.txt)
-    // console.log('\nlabels filter:', filterBy.labels)
-    console.log('\nsort filter:', filterBy.sortBy)
-
     let filteredToys = toys
 
     if (filterBy.txt) {
@@ -48,7 +43,7 @@ function query(filterBy) {
     return Promise.resolve(filteredToys)
 }
 
-function getById(toyId) {
+function get(toyId) {
     const toy = toys.find(toy => toy._id === toyId)
     if (!toy) return Promise.reject('Cannot find toy - ' + toyId)
     return Promise.resolve(toy)
@@ -61,17 +56,17 @@ function remove(toyId) {
     return _saveToysToFile()
 }
 
-function save(toyToSave) {
-    if (toyToSave._id) {
-        const toyIdx = toys.findIndex(toy => toy._id === toyToSave._id)
-        toys[toyIdx].name = toyToSave.name
+function save(toy) {
+    if (toy._id) {
+        const idx = toys.findIndex(currToy => currToy._id === toy._id)
+        toys[idx] = { ...toys[idx], ...toy }
     } else {
-        toyToSave._id = utilService.makeId()
-        toys.unshift(toyToSave)
+        toy._id = utilService.makeId()
+        toy.createdAt = Date.now()
+        toy.inStock = true
+        toys.unshift(toy)
     }
-
-    return _saveToysToFile().then(() => toyToSave)
-
+    return _saveToysToFile().then(() => toy)
 }
 
 function _saveToysToFile() {

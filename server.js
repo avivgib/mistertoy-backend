@@ -29,14 +29,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors(corsOptions))
 }
 
-console.log('HYE');
-
-
 // **************** Toys API ****************:
 app.get('/api/toy', (req, res) => {
-    console.log('req query:', req.query)
-    // console.log('req sort:', req.query.sortBy)
-
     const filterBy = {
         txt: req.query.name || '',
         sortBy: req.query.sortBy || '',
@@ -53,9 +47,62 @@ app.get('/api/toy', (req, res) => {
         })
 })
 
-app.post('/api/toy', (req, res) => {
-    console.log('POSTTT');
+app.get('/api/toy/:toyId', (req, res) => {
+    const { toyId } = req.params
+    toyService.get(toyId)
+        .then(toy => res.send(toy))
+        .catch(err => {
+            loggerService.error('Cannot get toy', err)
+            res.status(400).send(err)
+        })
+})
 
+app.post('/api/toy', (req, res) => {
+    const { name, price, labels } = req.body
+    const toy = {
+        name,
+        price: +price,
+        labels,
+    }
+    toyService.save(toy)
+        .then(savedToy => res.send(savedToy))
+        .catch(err => {
+            loggerService.error('Cannot add toy', err)
+            res.status(400).send('Cannot add toy')
+        })
+})
+
+app.put('/api/toy/:toyId', (req, res) => {
+    const {toyId} = req.params
+    const { name, price, labels, inStock } = req.body
+    const toy = {
+        _id :toyId, 
+        name,
+        price: +price, 
+        labels, 
+        inStock
+    } 
+
+    toyService.save(toy)
+        .then((savedToy) => res.send(savedToy))
+        .catch(err => {
+            loggerService.error('Cannot update toy', err)
+            res.status(400).send('Cannot update toy, ' + err)
+        })
+})
+
+
+app.delete('/api/toy/:toyId', (req, res) => {
+    const { toyId } = req.params
+
+    toyService.remove(toyId)
+        .then(() => {
+            res.send()
+        })
+        .catch(err => {
+            loggerService.error('Cannot delete toy', err)
+            res.status(400).send('Cannot delete toy, ' + err)
+        })
 })
 
 
