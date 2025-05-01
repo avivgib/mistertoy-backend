@@ -29,6 +29,10 @@ function query(filterBy) {
             toy.labels.some(label => filterBy.labels.includes(label))
         )
     }
+
+    if (filterBy.inStock !== undefined) {
+        filteredToys = filteredToys.filter(toy => toy.inStock === filterBy.inStock)
+    }
    
     if (filterBy.sortBy) {
         console.log('into sort', filterBy.sortBy)

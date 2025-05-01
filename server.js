@@ -40,8 +40,12 @@ app.get('/api/toy', (req, res) => {
     const filterBy = {
         txt: req.query.name || '',
         sortBy: req.query.sortBy || '',
-        labels: req.query.labels || []
+        labels: req.query.labels || [],
+        inStock: req.query.inStock === undefined ? undefined :
+                 req.query.inStock === 'true' ? true :
+                 req.query.inStock === 'false' ? false :undefined
     }
+    
     toyService.query(filterBy)
         .then(toys => res.send(toys))
         .catch(err => {
