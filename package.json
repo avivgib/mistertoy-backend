@@ -12,9 +12,11 @@
   "description": "",
   "keywords": [],
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cryptr": "^6.3.0",
-    "express": "^4.18.2"
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0"
   }
 }
