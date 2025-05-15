@@ -81,7 +81,7 @@
       "imgUrl": "duck.jpg"
     },
     {
-      "_id": "t108",
+      "_id": "t110",
       "name": "Robot Toy",
       "price": 65,
       "labels": ["Battery Powered", "Box game"],
@@ -90,16 +90,7 @@
       "imgUrl": "robot.jpg"
     },
     {
-      "_id": "t109",
-      "name": "Train Toy",
-      "price": 40,
-      "labels": ["On wheels", "Box game"],
-      "createdAt": 1631037801011,
-      "inStock": false,
-      "imgUrl": "train.jpg"
-    },
-    {
-      "_id": "t110",
+      "_id": "t111",
       "name": "Teddy Bear",
       "price": 20,
       "labels": ["Baby", "Doll"],
@@ -108,7 +99,7 @@
       "imgUrl": "teddy-bear.jpg"
     },
     {
-      "_id": "t111",
+      "_id": "t112",
       "name": "Pop-up Puzzle",
       "price": 35,
       "labels": ["Puzzle", "Art"],
@@ -117,7 +108,7 @@
       "imgUrl": "popup.jpg"
     },
     {
-      "_id": "t112",
+      "_id": "t113",
       "name": "Spaceship Helicopter",
       "price": 95,
       "labels": ["Outdoor", "Battery Powered"],
@@ -126,7 +117,7 @@
       "imgUrl": "spaceship.jpg"
     },
     {
-      "_id": "t113",
+      "_id": "t114",
       "name": "Word Board",
       "price": 25,
       "labels": ["Art", "Box game"],
@@ -135,7 +126,7 @@
       "imgUrl": "words-board.jpg"
     },
     {
-      "_id": "t114",
+      "_id": "t115",
       "name": "Monopoly Style Board Game",
       "price": 55,
       "labels": ["Box game"],
@@ -144,7 +135,7 @@
       "imgUrl": "monopoly.jpg"
     },
     {
-      "_id": "t115",
+      "_id": "t116",
       "name": "Play Stone Kitchen",
       "price": 75,
       "labels": ["Baby", "Box game"],
@@ -153,7 +144,7 @@
       "imgUrl": "play-stone.jpg"
     },
     {
-      "_id": "t116",
+      "_id": "t117",
       "name": "Race Car",
       "price": 70,
       "labels": ["On wheels", "Battery Powered"],
@@ -162,7 +153,7 @@
       "imgUrl": "race-car.jpg"
     },
     {
-      "_id": "t117",
+      "_id": "t118",
       "name": "Sea Wheel Spinner",
       "price": 15,
       "labels": ["Outdoor", "Art"],
@@ -171,7 +162,7 @@
       "imgUrl": "sea-wheel.jpg"
     },
     {
-      "_id": "t118",
+      "_id": "t119",
       "name": "Floating Duck 2",
       "price": 120,
       "labels": ["Outdoor", "Baby"],
@@ -180,7 +171,7 @@
       "imgUrl": "duck2.jpg"
     },
     {
-        "_id": "t119",
+        "_id": "t120",
         "name": "Doctor Kit",
         "price": 80,
         "labels": ["Box game", "Baby"],
@@ -189,22 +180,13 @@
         "imgUrl": "doctor-kit.jpg"
       },
       {
-        "_id": "t120",
+        "_id": "t121",
         "name": "Duck Family",
         "price": 60,
         "labels": ["Baby", "Outdoor"],
         "createdAt": 1725100000002,
         "inStock": false,
         "imgUrl": "duck-family.jpg"
-      },
-      {
-        "_id": "t121",
-        "name": "Frog Puzzle",
-        "price": 45,
-        "labels": ["Puzzle", "Baby"],
-        "createdAt": 1725100000003,
-        "inStock": true,
-        "imgUrl": "frog-puzzle.jpg"
       },
       {
         "_id": "t122",
@@ -424,7 +406,7 @@
         "imgUrl": "wooden-ambulance.jpg"
       },
       {
-        "_id": "t134",
+        "_id": "t146",
         "name": "Jungle Puzzle",
         "price": 50,
         "labels": ["Puzzle", "Box game"],
@@ -433,7 +415,7 @@
         "imgUrl": "jungle-puzzle.jpg"
       },
       {
-        "_id": "t135",
+        "_id": "t147",
         "name": "Sea Puzzle",
         "price": 50,
         "labels": ["Puzzle", "Box game"],
@@ -442,7 +424,7 @@
         "imgUrl": "sea-puzzle.jpg"
       },
       {
-        "_id": "t136",
+        "_id": "t148",
         "name": "Space Puzzle",
         "price": 50,
         "labels": ["Puzzle", "Box game"],
@@ -451,7 +433,7 @@
         "imgUrl": "space-puzzle.jpg"
       },
       {
-        "_id": "t137",
+        "_id": "t149",
         "name": "Traffic Puzzle",
         "price": 50,
         "labels": ["Puzzle", "On wheels"],
@@ -460,7 +442,7 @@
         "imgUrl": "traffic-puzzle.jpg"
       },
       {
-        "_id": "t138",
+        "_id": "t150",
         "name": "Wooden Vehicles",
         "price": 60,
         "labels": ["On wheels", "Baby"],
@@ -469,7 +451,7 @@
         "imgUrl": "wooden-vehicles.jpg"
       },
       {
-        "_id": "t139",
+        "_id": "t151",
         "name": "Wooden Cars",
         "price": 60,
         "labels": ["On wheels", "Baby"],
@@ -478,7 +460,7 @@
         "imgUrl": "wooden-cars.jpg"
       },
       {
-        "_id": "t140",
+        "_id": "t152",
         "name": "Wooden Firetruck",
         "price": 65,
         "labels": ["On wheels", "Baby"],
@@ -487,7 +469,7 @@
         "imgUrl": "wooden-firetruck.jpg"
       },
       {
-        "_id": "t141",
+        "_id": "t153",
         "name": "Wooden Train",
         "price": 70,
         "labels": ["On wheels", "Baby"],
@@ -496,7 +478,7 @@
         "imgUrl": "wooden-train.jpg"
       },
       {
-        "_id": "t142",
+        "_id": "t154",
         "name": "Wooden Bus",
         "price": 60,
         "labels": ["On wheels", "Baby"],
@@ -505,7 +487,7 @@
         "imgUrl": "wooden-bus.jpg"
       },
       {
-        "_id": "t143",
+        "_id": "t155",
         "name": "Wooden Tractor",
         "price": 60,
         "labels": ["On wheels", "Baby"],
@@ -514,7 +496,7 @@
         "imgUrl": "wooden-tractor.jpg"
       },
       {
-        "_id": "t144",
+        "_id": "t156",
         "name": "Wooden Police Car",
         "price": 60,
         "labels": ["On wheels", "Baby"],
@@ -523,7 +505,7 @@
         "imgUrl": "wooden-police-car.jpg"
       },
       {
-        "_id": "t145",
+        "_id": "t157",
         "name": "Wooden Ambulance",
         "price": 60,
         "labels": ["On wheels", "Baby"],
