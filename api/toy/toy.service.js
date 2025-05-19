@@ -1,10 +1,9 @@
 import { ObjectId } from 'mongodb'
-
 import { dbService } from '../../services/db.service.js'
 import { logger } from '../../services/logger.service.js'
 import { utilService } from '../../services/util.service.js'
 
-const toys = utilService.readJsonFile('data/toy.json')
+const PAGE_SIZE = 3
 
 export const toyService = {
     remove,
@@ -16,37 +15,26 @@ export const toyService = {
     removeToyMsg,
 }
 
-async function query(filterBy = { txt: '' }) {
+async function query(filterBy = {}) {
     try {
+        const { filterCriteria, sortCriteria, skip } = _buildCriteria(filterBy)
+
         const collection = await dbService.getCollection('toys')
-        console.log(`collection: ${collection}`)
-        let criteria = {}
 
-        if (filterBy.txt) {
-            criteria.name = { $regex: filterBy.txt, $options: 'i' }
-        }
+        const filteredToys = await collection
+            .find(filterCriteria)
+            .collation({ locale: 'en', numericOrdering: true })
+            .sort(sortCriteria)
+            .skip(skip)
+            // .limit(PAGE_SIZE)
+            .limit(100)
+            .toArray()
+        // console.log(`filteredToys: ${filteredToys}`)
 
-        if (filterBy.labels && filterBy.labels.length) {
-            criteria.labels = { $in: filterBy.labels }
-        }
+        const totalCount = filteredToys.length
+        const maxPage = Math.ceil(totalCount / PAGE_SIZE)
 
-        if (filterBy.inStock !== undefined) {
-            criteria.inStock = JSON.parse(filterBy.inStock)
-        }
-
-        let toys = await collection.find(criteria).toArray()
-
-        if (filterBy.sortBy) {
-            if (filterBy.sortBy === 'name') {
-                toys.sort((a, b) => a.name.localeCompare(b.name))
-            } else if (filterBy.sortBy === 'price') {
-                toys.sort((a, b) => a.price - b.price)
-            } else if (filterBy.sortBy === 'createdAt') {
-                toys.sort((a, b) => a.createdAt - b.createdAt)
-            }
-        }
-
-        return toys
+        return filteredToys
     } catch (err) {
         logger.error('cannot find toys', err)
         throw err
@@ -56,11 +44,13 @@ async function query(filterBy = { txt: '' }) {
 async function getById(toyId) {
     try {
         const collection = await dbService.getCollection('toys')
-        const toy = await collection.findOne({ _id: ObjectId.createFromHexString(toyId) })
+        const toy = await collection.findOne({
+            _id: ObjectId.createFromHexString(toyId)
+        })
         toy.createdAt = toy._id.getTimestamp()
         return toy
     } catch (err) {
-        logger.error(`while finding car ${toyId}`, err)
+        logger.error(`while finding toy ${toyId}`, err)
         throw err
     }
 }
@@ -68,84 +58,106 @@ async function getById(toyId) {
 async function remove(toyId) {
     try {
         const collection = await dbService.getCollection('toys')
-        const { deletedCount } = await collection.deleteOne({ _id: ObjectId.createFromHexString(toyId) })
-        return deletedCount
+        await collection.deleteOne({ _id: ObjectId.createFromHexString(toyId) })
+        // return deletedCount
     } catch (err) {
-        logger.error(`cannot remove car ${toyId}`, err)
-		throw err
+        logger.error(`cannot remove toy ${toyId}`, err)
+        throw err
     }
 }
 
 async function add(toy) {
     try {
+        toy.inStock = true
         const collection = await dbService.getCollection('toys')
-
-        if (toy._id) {
-			const toyId = new ObjectId(toy._id)
-			await collection.updateOne(
-				{ _id: toyId },
-				{ $set: { ...toy } }
-			)
-		} else {
-			toy._id = new ObjectId()
-			toy.createdAt = Date.now()
-			toy.inStock = true
-			await collection.insertOne(toy)
-		}
-
-		return toy
+        await collection.insertOne(toy)
+        toy.createdAt = toy._id.getTimestamp()
+        return toy
     } catch (err) {
         logger.error('cannot insert toy', err)
-		throw err
+        throw err
     }
 }
 
 async function update(toy) {
-	try {
-		const toyToSave = {
-			name: toy.name,
-			price: toy.price,
-			inStock: toy.inStock,
-			labels: toy.labels,
-		}
-		const collection = await dbService.getCollection('toys')
-		await collection.updateOne(
-			{ _id: new ObjectId.createFromHexString(toy._id) },
-			{ $set: toyToSave }
-		)
-		return toy
-	} catch (err) {
-		logger.error(`cannot update toy ${toy._id}`, err)
-		throw err
-	}
+    try {
+        const { name, price, labels } = toy
+        const toyToUpdate = {
+            name,
+            price,
+            labels,
+            // inStock: toy.inStock,
+        }
+        const collection = await dbService.getCollection('toys')
+        await collection.updateOne(
+            { _id: new ObjectId.createFromHexString(toy._id) },
+            { $set: toyToUpdate }
+        )
+        return toy
+    } catch (err) {
+        logger.error(`cannot update toy ${toy._id}`, err)
+        throw err
+    }
 }
 
 async function addToyMsg(toyId, msg) {
-	try {
-		msg.id = utilService.makeId()
-		const collection = await dbService.getCollection('toys')
-		await collection.updateOne(
-			{ _id: new ObjectId.createFromHexString(toyId) },
-			{ $push: { msgs: msg } },
-			{ upsert: false }
-		)
-		return msg
-	} catch (err) {
-		logger.error(`cannot add toy msg ${toyId}`, err)
-		throw err
-	}
+    try {
+        msg.id = utilService.makeId()
+        const collection = await dbService.getCollection('toys')
+        await collection.updateOne(
+            { _id: new ObjectId.createFromHexString(toyId) },
+            { $push: { msgs: msg } },
+            { upsert: false }
+        )
+        return msg
+    } catch (err) {
+        logger.error(`cannot add toy msg ${toyId}`, err)
+        throw err
+    }
 }
 
 async function removeToyMsg(toyId, msgId) {
-	try {
-		const collection = await dbService.getCollection('toys')
-		await collection.updateOne(
-			{ _id: new ObjectId.createFromHexString(toyId) },
-			{ $pull: { msgs: { id: msgId } } }
-		)
-		return msgId
-	} catch (err) {
-		logger.error(`cannot remove toy msg ${toyId}`, err)
-		throw err
-	}
+    try {
+        const collection = await dbService.getCollection('toys')
+        await collection.updateOne(
+            { _id: new ObjectId.createFromHexString(toyId) },
+            { $pull: { msgs: { id: msgId } } }
+        )
+        return msgId
+    } catch (err) {
+        logger.error(`cannot remove toy msg ${toyId}`, err)
+        throw err
+    }
+}
+
+
+function _buildCriteria(filterBy) {
+    const filterCriteria = {}
+
+    if (filterBy.txt) {
+        filterCriteria.name = { $regex: filterBy.txt, $options: 'i' }
+    }
+
+    if (filterBy.inStock !== undefined) {
+        filterCriteria.inStock = JSON.parse(filterBy.inStock)
+    }
+
+    if (filterBy.labels?.length) {
+        filterCriteria.labels = { $in: filterBy.labels }
+        // filterCriteria.labels = { $all: filterBy.labels }
+    }
+
+    const sortCriteria = {}
+    const sortBy = filterBy.sortBy
+
+    if (sortBy && sortBy.type) {
+        const sortDirection = +sortBy.sortDir
+        sortCriteria[sortBy.type] = sortDirection
+    } else {
+        sortCriteria.createdAt = -1
+    }
+
+    const skip = filterBy.pageIdx !== undefined ? filterBy.pageIdx * PAGE_SIZE : 0
+    
+    return { filterCriteria, sortCriteria, skip }
 }
