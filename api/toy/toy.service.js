@@ -150,9 +150,11 @@ function _buildCriteria(filterBy) {
     const sortCriteria = {}
     const sortBy = filterBy.sortBy
 
-    if (sortBy && sortBy.type) {
-        const sortDirection = +sortBy.sortDir
-        sortCriteria[sortBy.type] = sortDirection
+    // if (sortBy && sortBy.type) {
+    if (sortBy) {
+        // const sortDirection = +sortBy.sortDir
+        // sortCriteria[sortBy.type] = sortDirection
+        sortCriteria[sortBy] = 1
     } else {
         sortCriteria.createdAt = -1
     }

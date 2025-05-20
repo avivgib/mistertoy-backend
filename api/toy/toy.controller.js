@@ -2,12 +2,29 @@ import { toyService } from "./toy.service.js"
 import { logger } from "../../services/logger.service.js"
 
 export async function getToys(req, res) {
+    console.log('req.query:', req.query)
+    console.log('req.params:', req.params)
     try {
-        const { txt, inStock, labels, sortBy } = req.query
+        const { txt, inStock, sortBy } = req.query
+        const labels = req.query['labels[]'] || req.query.labels || []
+
+
+        console.log('txt:', txt)
+        console.log('inStock:', inStock)
+        console.log('labels:', labels)
+        console.log('sortBy:', sortBy)
+
+        let labelsArr = []
+        if (Array.isArray(labels)) {
+            labelsArr = labels
+        } else if (typeof labels === 'string') {
+            labelsArr = labels.split(',')
+        }
+
         const filterBy = {
             txt: txt || '',
             inStock: inStock === 'true' ? true : inStock === 'false' ? false : undefined,
-            labels: labels ? labels.split(',') : [],
+            labels: labelsArr,
             sortBy: sortBy || '' 
         }
 
@@ -23,7 +40,6 @@ export async function getToys(req, res) {
         res.status(500).send({ err: 'Failed to get toys', details: err.message || err })
     }
 }
-
 
 export async function getToyById(req, res) {
     try {
