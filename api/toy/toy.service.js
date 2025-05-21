@@ -43,10 +43,10 @@ async function query(filterBy = {}) {
 
 async function getById(toyId) {
     try {
+        if (!_isValidObjectId(toyId)) throw new Error('Invalid toyId')
         const collection = await dbService.getCollection('toys')
-        const toy = await collection.findOne({
-            _id: ObjectId.createFromHexString(toyId)
-        })
+        const toy = await collection.findOne({ _id: new ObjectId(toyId) })
+        if (!toy) throw new Error('Toy not found')
         toy.createdAt = toy._id.getTimestamp()
         return toy
     } catch (err) {
@@ -79,26 +79,38 @@ async function add(toy) {
     }
 }
 
+
 async function update(toy) {
     try {
+        logger.debug(`[TOY SERVICE] update - start`, { toyId: toy._id, toy })
+
         const { name, price, labels } = toy
-        const toyToUpdate = {
-            name,
-            price,
-            labels,
-            // inStock: toy.inStock,
-        }
+        const toyToUpdate = { name, price, labels }
+
         const collection = await dbService.getCollection('toys')
-        await collection.updateOne(
-            { _id: new ObjectId.createFromHexString(toy._id) },
+        logger.debug(`[TOY SERVICE] update - got collection`)
+
+        const objectId = new ObjectId(toy._id)
+        logger.debug(`[TOY SERVICE] update - objectId created`, { objectId })
+
+        const result = await collection.updateOne(
+            { _id: objectId },
             { $set: toyToUpdate }
         )
+        logger.debug(`[TOY SERVICE] update - updateOne result`, { result })
+
+        if (result.matchedCount === 0) {
+            throw new Error(`Toy with id ${toy._id} not found`)
+        }
+
+        logger.debug(`[TOY SERVICE] update - success`)
         return toy
     } catch (err) {
-        logger.error(`cannot update toy ${toy._id}`, err)
+        logger.error(`[TOY SERVICE] update - error`, err)
         throw err
     }
 }
+
 
 async function addToyMsg(toyId, msg) {
     try {
@@ -160,6 +172,10 @@ function _buildCriteria(filterBy) {
     }
 
     const skip = filterBy.pageIdx !== undefined ? filterBy.pageIdx * PAGE_SIZE : 0
-    
+
     return { filterCriteria, sortCriteria, skip }
+}
+
+function _isValidObjectId(id) {
+    return ObjectId.isValid(id) && (String)(new ObjectId(id)) === id
 }
