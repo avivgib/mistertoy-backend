@@ -11,8 +11,8 @@ export const toyService = {
     getById,
     add,
     update,
-    addToyMsg,
-    removeToyMsg,
+    addMsg,
+    removeMsg,
 }
 
 async function query(filterBy = {}) {
@@ -112,7 +112,7 @@ async function update(toy) {
 }
 
 
-async function addToyMsg(toyId, msg) {
+async function addMsg(toyId, msg) {
     try {
         msg.id = utilService.makeId()
         const collection = await dbService.getCollection('toys')
@@ -128,7 +128,7 @@ async function addToyMsg(toyId, msg) {
     }
 }
 
-async function removeToyMsg(toyId, msgId) {
+async function removeMsg(toyId, msgId) {
     try {
         const collection = await dbService.getCollection('toys')
         await collection.updateOne(
