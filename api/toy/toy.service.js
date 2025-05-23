@@ -79,40 +79,39 @@ async function add(toy) {
     }
 }
 
-
 async function update(toy) {
     try {
-        logger.debug(`[TOY SERVICE] update - start`, { toyId: toy._id, toy })
+        // logger.debug(`[TOY SERVICE] update - start`, { toyId: toy._id, toy })
 
         const { name, price, labels } = toy
         const toyToUpdate = { name, price, labels }
 
         const collection = await dbService.getCollection('toys')
-        logger.debug(`[TOY SERVICE] update - got collection`)
+        // logger.debug(`[TOY SERVICE] update - got collection`)
 
         const objectId = new ObjectId(toy._id)
-        logger.debug(`[TOY SERVICE] update - objectId created`, { objectId })
+        // logger.debug(`[TOY SERVICE] update - objectId created`, { objectId })
 
         const result = await collection.updateOne(
             { _id: objectId },
             { $set: toyToUpdate }
         )
-        logger.debug(`[TOY SERVICE] update - updateOne result`, { result })
+        // logger.debug(`[TOY SERVICE] update - updateOne result`, { result })
 
         if (result.matchedCount === 0) {
             throw new Error(`Toy with id ${toy._id} not found`)
         }
 
-        logger.debug(`[TOY SERVICE] update - success`)
+        // logger.debug(`[TOY SERVICE] update - success`)
         return toy
     } catch (err) {
-        logger.error(`[TOY SERVICE] update - error`, err)
+        // logger.error(`[TOY SERVICE] update - error`, err)
         throw err
     }
 }
 
-
 async function addMsg(toyId, msg) {
+    console.log('msg', msg)
     try {
         msg.id = utilService.makeId()
         const collection = await dbService.getCollection('toys')
